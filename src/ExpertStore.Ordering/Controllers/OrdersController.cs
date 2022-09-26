@@ -23,6 +23,25 @@ namespace ExpertStore.Ordering.Controllers
                 return BadRequest(ex);
             }
         }
+        
+        [HttpGet("{OrderId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDetail))]
+        public async Task<IActionResult> GetOrderDetails(
+            [FromRoute] GetOrderInput input, 
+            [FromServices] IUseCase<GetOrderInput, OrderDetail?> useCase)
+        {
+            try
+            {
+                var order = await useCase.Handle(input);
+                if(order is null)
+                    return NotFound(new ProblemDetails() { Title = $"Order {input.OrderId} not found", Status = 404 });
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreateOrderOutput))]

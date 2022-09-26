@@ -22,23 +22,20 @@ public class ListOrders : IUseCase<List<ListOrdersOutputItem>>
     private readonly ILogger<ListOrders> _logger;
 }
 
-public record Person(int Id, string Name, string Address);
-public record Item(int ProductId, int Quantity, decimal Value);
-public record Delivery(string CarrierReference, string Status);
-
 public record ListOrdersOutputItem(
     Guid Id,
     string Status,
     DateTime Date,
-    Person Retailer,
-    Person Shopper,
-    Delivery? Delivery,
-    IEnumerable<Item> Items) {
+    string Retailer,
+    string Shopper,
+    int TotalItems,
+    decimal TotalPrice)
+{
 
     public static ListOrdersOutputItem FromOrder(Order order)
-        => new(order.Id, order.Status.ToString(), order.Date,
-            new(order.Retailer.Id, order.Retailer.Name, order.Retailer.Address),
-            new(order.Shopper.Id, order.Shopper.Name, order.Shopper.Address),
-            order.Delivery is null ? null : new(order.Delivery.CarrierReference, order.Delivery.CurrentStatus.ToString()),
-            order.Items.Select(item => new Item(item.ProductId, item.Quantity, item.Value)));
+            => new(order.Id, order.Status.ToString(), order.Date,
+                order.Retailer.Name,
+                order.Shopper.Name,
+                order.Items.Aggregate(0, (total, item) => total + item.Quantity),
+                order.Items.Aggregate((decimal)0, (total, item) => total + item.Value));
 };
