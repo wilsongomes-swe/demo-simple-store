@@ -1,4 +1,5 @@
 ﻿using ExpertStore.SeedWork.IntegrationEvents;
+using ExpertStore.SeedWork.Interfaces;
 using ExpertStore.SeedWork.RabbitProducer;
 using Newtonsoft.Json;
 using PaymentsProcessor.UseCases;
@@ -7,16 +8,9 @@ using RabbitMQ.Client.Events;
 using System.Text;
 
 namespace PaymentsProcessor;
+
 public class PaymentProcessorSubscriber : BackgroundService
 {
-    private readonly IModel _channel;
-    private readonly ILogger _logger;
-    private readonly IProcessPayment _processPaymentUseCase;
-    private readonly IRabbitConnection _rabbitConnection;
-
-    private string Queue;
-    private string Exchange;
-
     public PaymentProcessorSubscriber(
         ILogger<PaymentProcessorSubscriber> logger,
         IRabbitConnection rabbitConnection,
@@ -25,7 +19,8 @@ public class PaymentProcessorSubscriber : BackgroundService
     )
     {
         _logger = logger;
-        _processPaymentUseCase = factory.CreateScope().ServiceProvider.GetRequiredService<IProcessPayment>();
+        _processPaymentUseCase =
+            factory.CreateScope().ServiceProvider.GetRequiredService<IUseCase<ProcessPaymentInput, ProcessPaymentOutput>>();
         _rabbitConnection = rabbitConnection;
 
         Queue = config.GetSection("RabbitMQ").GetValue<string>("PaymentProcessorSubscriberQueue");
@@ -33,10 +28,9 @@ public class PaymentProcessorSubscriber : BackgroundService
 
         _channel = _rabbitConnection.Connection.CreateModel();
         _channel.ExchangeDeclare(
-            exchange: Exchange,
-            type: ExchangeType.Topic,
-            durable: true,
-            autoDelete: false
+            Exchange,
+            ExchangeType.Topic,
+            true
         );
 
         _channel.QueueDeclare(Queue, false, false, false, null);
@@ -47,31 +41,34 @@ public class PaymentProcessorSubscriber : BackgroundService
     {
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += async (sender, eventArgs) => {
+        consumer.Received += async (sender, eventArgs) =>
+        {
             var contentArray = eventArgs.Body.ToArray();
             var contentString = Encoding.UTF8.GetString(contentArray);
-            var message = JsonConvert.DeserializeObject<OrderCreatedEventPayload>(contentString);
-            if (message == null)
-                throw new NullReferenceException("Message received is null");
+            var message = JsonConvert.DeserializeObject<OrderCreatedEvent>(contentString);
+            if (message == null) throw new NullReferenceException("Message received is null");
 
             _logger.LogInformation($"Payment processor received an event: {contentString}");
 
-            var output = await _processPaymentUseCase.Handle(new ProcessPaymentInput(){ 
-                Date = message.Date, 
-                OrderId = message.OrderId, 
-                ProductId = message.ProductId, 
-                Quantity = message.Quantity 
-            });
+            var output = await _processPaymentUseCase
+                .Handle(new ProcessPaymentInput(message.OrderId, message.TotalValue));
 
             _channel.BasicAck(eventArgs.DeliveryTag, false);
 
-            _logger.LogInformation($"Payment processor: {output.OrderId} -> { (output.IsApproved ? "Approved" : "Refused") }");
+            _logger.LogInformation($"Payment processor: {message.OrderId} -> {(output.IsApproved ? "Approved" : "Refused")}");
         };
 
         _channel.BasicConsume(Queue, false, consumer);
 
         return Task.CompletedTask;
     }
+
+    readonly string Queue;
+    readonly string Exchange;
+    readonly IModel _channel;
+    readonly ILogger _logger;
+    readonly IUseCase<ProcessPaymentInput, ProcessPaymentOutput> _processPaymentUseCase;
+    readonly IRabbitConnection _rabbitConnection;
 }
 
 public static class PaymentProcessorSubscriberExtensions

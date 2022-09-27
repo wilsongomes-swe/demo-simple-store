@@ -10,14 +10,6 @@ namespace ExpertStore.Ordering.Subscribers;
 
 public class PaymentSubscriber : BackgroundService
 {
-    private readonly IModel _channel;
-    private readonly ILogger _logger;
-    private readonly IUpdateOrderPaymentResult _updateOrderPaymentResult;
-    private readonly IRabbitConnection _rabbitConnection;
-
-    private readonly string Queue;
-    private readonly string Exchange;
-
     public PaymentSubscriber(
         ILogger<PaymentSubscriber> logger,
         IRabbitConnection rabbitConnection,
@@ -34,10 +26,10 @@ public class PaymentSubscriber : BackgroundService
 
         _channel = _rabbitConnection.Connection.CreateModel();
         _channel.ExchangeDeclare(
-            exchange: Exchange,
-            type: ExchangeType.Topic,
-            durable: true,
-            autoDelete: false
+            Exchange,
+            ExchangeType.Topic,
+            true,
+            false
         );
 
         _channel.QueueDeclare(Queue, false, false, false, null);
@@ -48,18 +40,19 @@ public class PaymentSubscriber : BackgroundService
     {
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += async (sender, eventArgs) => {
+        consumer.Received += async (sender, eventArgs) =>
+        {
             var contentArray = eventArgs.Body.ToArray();
             var contentString = Encoding.UTF8.GetString(contentArray);
-            var message = JsonConvert.DeserializeObject<PaymentProcessedPayload>(contentString);
-            if (message == null)
-                throw new NullReferenceException("Message received is null");
+            var message = JsonConvert.DeserializeObject<PaymentProcessedEvent>(contentString);
+            if (message == null) throw new NullReferenceException("Message received is null");
 
             _logger.LogInformation($"Ordering payment subscriber received an event: {contentString}");
 
-            var output = await _updateOrderPaymentResult.Handle(new UpdateOrderPaymentResultInput() {
+            var output = await _updateOrderPaymentResult.Handle(new UpdateOrderPaymentResultInput
+            {
                 OrderId = message.OrderId,
-                Approved = message.Approved,
+                Approved = message.Approved
             });
 
             _channel.BasicAck(eventArgs.DeliveryTag, false);
@@ -69,6 +62,14 @@ public class PaymentSubscriber : BackgroundService
 
         return Task.CompletedTask;
     }
+
+    readonly IModel _channel;
+    readonly ILogger _logger;
+    readonly IUpdateOrderPaymentResult _updateOrderPaymentResult;
+    readonly IRabbitConnection _rabbitConnection;
+
+    readonly string Queue;
+    readonly string Exchange;
 }
 
 public static class PaymentSubscriberExtensions

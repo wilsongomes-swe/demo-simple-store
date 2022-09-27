@@ -1,14 +1,6 @@
 version: '3.4'
 
 services:
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    environment:
-      - COLLECTOR_OTLP_ENABLED=true
-    ports:
-      - 6831:6831/udp
-      - 16686:16686
-
   expertstore.ordering:
     image: ${DOCKER_REGISTRY-}expertstoreordering
     build:
@@ -26,3 +18,10 @@ services:
     build:
       context: .
       dockerfile: src/PaymentsProcessor/Dockerfile
+
+  external.thecarrier:
+    image: ${DOCKER_REGISTRY-}externalthecarrier
+    build:
+      context: .
+      dockerfile: src/External.TheCarrier/Dockerfile
+

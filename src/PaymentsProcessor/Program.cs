@@ -1,4 +1,5 @@
 using ExpertStore.Ordering.Tracing;
+using ExpertStore.SeedWork.Interfaces;
 using ExpertStore.SeedWork.RabbitProducer;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IProcessPayment, ProcessPayment>();
+builder.Services.AddScoped<IUseCase<ProcessPaymentInput, ProcessPaymentOutput>, ProcessPayment>();
 builder.Services.AddRabbitMessageBus();
 builder.Services.AddPaymentProcessorSubscriber();
 

@@ -3,48 +3,29 @@ using ExpertStore.SeedWork.Interfaces;
 
 namespace PaymentsProcessor.UseCases;
 
-public class ProcessPayment : IProcessPayment
+public class ProcessPayment : IUseCase<ProcessPaymentInput, ProcessPaymentOutput>
 {
-    private readonly IEventBus _eventBus;
-    public ProcessPayment(IEventBus eventBus) 
-        => _eventBus = eventBus;
+    public ProcessPayment(IEventBus eventBus)
+    {
+        _eventBus = eventBus;
+    }
 
     public Task<ProcessPaymentOutput> Handle(ProcessPaymentInput input)
     {
-        // the processment logic
         Thread.Sleep(10 * 1000);
-        var processed = (input.ProductId % 7 == 0);
+        var approved = input.TotalValue < 500;
 
-        if (processed)
-            _eventBus.Publish(new PaymentApprovedEvent(
-                input.Date, 
-                input.OrderId, 
-                input.ProductId, 
-                input.Quantity));
+        if (approved)
+            _eventBus.Publish(new PaymentApprovedEvent(input.OrderId));
         else
-            _eventBus.Publish(new PaymentRefusedEvent(
-                input.Date,
-                input.OrderId,
-                input.ProductId,
-                input.Quantity, 
-                "Credid Card Refused"));
+            _eventBus.Publish(new PaymentRefusedEvent(input.OrderId, "Credid Card Refused"));
 
-        return Task.FromResult(new ProcessPaymentOutput() { OrderId = input.OrderId, IsApproved = processed });
+        return Task.FromResult(new ProcessPaymentOutput(input.OrderId, approved));
     }
+
+    readonly IEventBus _eventBus;
 }
 
-public interface IProcessPayment : IUseCase<ProcessPaymentInput, ProcessPaymentOutput> { }
+public record ProcessPaymentInput(Guid OrderId, decimal TotalValue);
 
-public class ProcessPaymentInput
-{
-    public Guid OrderId { get; set; }
-    public int ProductId { get; set; }
-    public int Quantity { get; set; }
-    public DateTime Date { get; set; }
-}
-
-public class ProcessPaymentOutput
-{
-    public Guid OrderId { get; set; }
-    public bool IsApproved { get; set; }
-}
+public record ProcessPaymentOutput(Guid OrderId, bool IsApproved);

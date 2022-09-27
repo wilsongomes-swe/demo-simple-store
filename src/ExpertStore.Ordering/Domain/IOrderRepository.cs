@@ -1,10 +1,9 @@
-﻿namespace ExpertStore.Ordering.Domain
+﻿namespace ExpertStore.Ordering.Domain;
+
+public interface IOrderRepository
 {
-    public interface IOrderRepository
-    {
-        Task<List<Order>> GetList();
-        Task<Order?> Get(Guid id);
-        Task Update(Order order);
-        Task Save(Order order);
-    }
+    Task<List<Order>> GetList();
+    Task<Order?> Get(Guid id);
+    Task Update(Order order);
+    Task Save(Order order);
 }

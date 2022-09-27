@@ -18,26 +18,27 @@ public class CreateOrder : IUseCase<CreateOrderInput, CreateOrderOutput>
         ValidateInput(input);
 
         var order = new Order(
-            new(input.RetailerId, input.RetailerName, input.RetailerAddress),
-            new(input.ShopperId, input.ShopperName, input.ShopperAddress));
+            new Domain.Person(input.RetailerId, input.RetailerName, input.RetailerAddress),
+            new Domain.Person(input.ShopperId, input.ShopperName, input.ShopperAddress));
         input.Items.ToList().ForEach(
             item => order.AddItem(item.ProductId, item.Quantity, item.Value));
 
         await _orderRepository.Save(order);
-        
-        //_eventBus.Publish(new OrderCreatedEvent(
-        //    order.Date,
-        //    order.Id,
-        //    order.ProductId,
-        //    order.Quantity));
-        
-        _logger.LogInformation("Order created! (log)");
-        _logger.LogTrace("Order created! (trace)");
+
+        _eventBus.Publish(new OrderCreatedEvent(
+            order.Id,
+            order.Date,
+            order.Items.Aggregate((decimal)0, (total, item) => total + item.Value))
+        );
+
+        _logger.LogInformation($"Order created: {order.Id}");
         return new CreateOrderOutput(order.Id, order.Status.ToString());
     }
 
     void ValidateInput(CreateOrderInput input)
-    { }
+    {
+        if (input.Items.Any(item => item.Quantity == 0)) throw new ArgumentException("Please provide a valid quantity.", nameof(Item.Quantity));
+    }
 
     readonly IOrderRepository _orderRepository;
     readonly IEventBus _eventBus;
@@ -47,11 +48,11 @@ public class CreateOrder : IUseCase<CreateOrderInput, CreateOrderOutput>
 public record CreateOrderInputItem(int ProductId, int Quantity, decimal Value);
 
 public record CreateOrderInput(
-    string ShopperName, 
-    string ShopperAddress, 
-    int ShopperId, 
-    string RetailerName, 
-    string RetailerAddress, 
+    string ShopperName,
+    string ShopperAddress,
+    int ShopperId,
+    string RetailerName,
+    string RetailerAddress,
     int RetailerId,
     IEnumerable<CreateOrderInputItem> Items);
 

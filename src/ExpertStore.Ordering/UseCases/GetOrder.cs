@@ -18,13 +18,15 @@ public class GetOrder : IUseCase<GetOrderInput, OrderDetail?>
         return order is null ? null : OrderDetail.FromOrder(order);
     }
 
-    private readonly IOrderRepository _repository;
-    private readonly ILogger<ListOrders> _logger;
+    readonly IOrderRepository _repository;
+    readonly ILogger<ListOrders> _logger;
 }
 
 public record Person(int Id, string Name, string Address);
+
 public record Item(int ProductId, int Quantity, decimal Value);
-public record Delivery(string CarrierReference, string Status);
+
+public record Delivery(string Status);
 
 public record GetOrderInput(Guid OrderId);
 
@@ -37,11 +39,10 @@ public record OrderDetail(
     Delivery? Delivery,
     IEnumerable<Item> Items)
 {
-
     public static OrderDetail FromOrder(Order order)
         => new(order.Id, order.Status.ToString(), order.Date,
-            new(order.Retailer.Id, order.Retailer.Name, order.Retailer.Address),
-            new(order.Shopper.Id, order.Shopper.Name, order.Shopper.Address),
-            order.Delivery is null ? null : new(order.Delivery.CarrierReference, order.Delivery.CurrentStatus.ToString()),
+            new Person(order.Retailer.Id, order.Retailer.Name, order.Retailer.Address),
+            new Person(order.Shopper.Id, order.Shopper.Name, order.Shopper.Address),
+            order.Delivery is null ? null : new Delivery(order.Delivery.CurrentStatus.ToString()),
             order.Items.Select(item => new Item(item.ProductId, item.Quantity, item.Value)));
-};
+}

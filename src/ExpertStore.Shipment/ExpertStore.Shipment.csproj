@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application\UseCases\**" />
+    <Content Remove="Application\UseCases\**" />
+    <EmbeddedResource Remove="Application\UseCases\**" />
+    <None Remove="Application\UseCases\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flurl.Http" Version="4.0.0-pre2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExpertStore.SeedWork\ExpertStore.SeedWork.csproj" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://blockprotocol.org/schemas/block-metadata.json" /></VisualStudio></ProjectExtensions>
+
+</Project>
