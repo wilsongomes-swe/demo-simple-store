@@ -7,23 +7,21 @@ namespace ExpertStore.Shipment.Api;
 [ApiController, Route("[controller]")]
 public class ShipmentsController : ControllerBase
 {
-    public ShipmentsController(ILogger<ShipmentsController> logger)
-    {
-        _logger = logger;
-    }
+    public ShipmentsController(ILogger<ShipmentsController> logger) => _logger = logger;
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<ListShipmentsItem>))]
-    public async Task<IActionResult> GetList([FromServices] IUseCase<IReadOnlyCollection<ListShipmentsItem>?> useCase)
+    public async Task<IActionResult> GetList([FromServices] IUseCase<IReadOnlyCollection<ListShipmentsItem>> useCase)
         => Ok(await useCase.Handle());
 
-    [HttpGet("{shipmentId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDetail))]
-    public async Task<IActionResult> Get([FromRoute] GetShipmentDetailInput input, [FromServices] IUseCase<GetShipmentDetailInput, ShipmentDetail?> useCase)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> Get(
+        [FromRoute] Guid id, 
+        [FromServices] IUseCase<GetShipmentDetailInput, ShipmentDetail?> useCase)
     {
-        var item = await useCase.Handle(input);
+        var item = await useCase.Handle(new GetShipmentDetailInput(id));
         if (item is null)
-            return NotFound(new ProblemDetails() { Title = $"Shipment '{input.ShipmentId}' not found." });
+            return NotFound(new ProblemDetails() { Title = $"Shipment '{id}' not found." });
 
         return Ok(item);
     }

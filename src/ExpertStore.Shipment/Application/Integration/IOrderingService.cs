@@ -2,5 +2,5 @@
 
 public interface IOrderingService
 {
-    public Task<OrderDto?> GetShipmentFromOrderDetails(Guid orderId);
+    public Task<OrderDto?> GetOrderDetails(Guid orderId);
 }

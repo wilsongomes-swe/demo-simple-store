@@ -1,7 +1,6 @@
 using ExpertStore.Ordering.Domain;
 using ExpertStore.Ordering.Repositories;
 using ExpertStore.Ordering.Subscribers;
-using ExpertStore.Ordering.Tracing;
 using ExpertStore.Ordering.UseCases;
 using ExpertStore.SeedWork.Interfaces;
 using ExpertStore.SeedWork.RabbitProducer;

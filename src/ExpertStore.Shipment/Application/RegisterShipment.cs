@@ -31,7 +31,7 @@ public class RegisterShipment : IUseCase<RegisterShipmentInput, RegisterShipment
             throw new Exception($"This shipment is already registered, id: {existingShipment.Id}");
 
         _logger.LogInformation("Getting order details in order service...");
-        var orderDto = await _orderingService.GetShipmentFromOrderDetails(input.OrderId);
+        var orderDto = await _orderingService.GetOrderDetails(input.OrderId);
         if (orderDto is null)
             throw new Exception($"Shipment {input.OrderId} doesn`t exists in the orders service");
         

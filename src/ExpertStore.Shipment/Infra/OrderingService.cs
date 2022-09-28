@@ -14,7 +14,7 @@ public class OrderingService : IOrderingService
     public OrderingService(IConfiguration config, ILogger<OrderingService> logger) 
         => (OrderingServiceUrl, _logger) = (config.GetValue<string>("OrdersServiceUrl"), logger);
 
-    public async Task<OrderDto?> GetShipmentFromOrderDetails(Guid orderId)
+    public async Task<OrderDto?> GetOrderDetails(Guid orderId)
     {
         _logger.LogInformation($"Calling ordering service to get the order: {orderId}");
         var orderDtoJson = await OrderingServiceUrl
