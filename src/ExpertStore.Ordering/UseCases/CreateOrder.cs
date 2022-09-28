@@ -1,6 +1,6 @@
 ﻿using ExpertStore.Ordering.Domain;
-using ExpertStore.SeedWork.IntegrationEvents;
 using ExpertStore.SeedWork.Interfaces;
+using ExpertStore.SeedWork.IntegrationEvents;
 
 namespace ExpertStore.Ordering.UseCases;
 

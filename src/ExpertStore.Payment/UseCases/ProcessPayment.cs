@@ -1,7 +1,7 @@
 ﻿using ExpertStore.SeedWork.IntegrationEvents;
 using ExpertStore.SeedWork.Interfaces;
 
-namespace PaymentsProcessor.UseCases;
+namespace ExpertStore.Payment.UseCases;
 
 public class ProcessPayment : IUseCase<ProcessPaymentInput, ProcessPaymentOutput>
 {

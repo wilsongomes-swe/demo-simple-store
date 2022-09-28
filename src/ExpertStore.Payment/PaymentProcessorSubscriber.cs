@@ -1,13 +1,13 @@
 ﻿using ExpertStore.SeedWork.IntegrationEvents;
 using ExpertStore.SeedWork.Interfaces;
 using ExpertStore.SeedWork.RabbitProducer;
+using ExpertStore.Payment.UseCases;
 using Newtonsoft.Json;
-using PaymentsProcessor.UseCases;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 
-namespace PaymentsProcessor;
+namespace ExpertStore.Payment;
 
 public class PaymentProcessorSubscriber : BackgroundService
 {

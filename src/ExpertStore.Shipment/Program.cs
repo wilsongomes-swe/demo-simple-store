@@ -1,8 +1,10 @@
 using ExpertStore.SeedWork.Interfaces;
+using ExpertStore.SeedWork.RabbitProducer;
 using ExpertStore.Shipment.Application;
 using ExpertStore.Shipment.Application.Integration;
 using ExpertStore.Shipment.Domain;
 using ExpertStore.Shipment.Infra;
+using ExpertStore.Shipment.Subscribers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddTransient<IUseCase<GetShipmentDetailInput, ShipmentDetail?>,
 builder.Services.AddSingleton<IShipmentRepository, ShipmentRepository>();
 builder.Services.AddTransient<IOrderingService, OrderingService>();
 builder.Services.AddTransient<ICarrierService, CarrierService>();
+builder.Services.AddRabbitMessageBus();
+builder.Services.AddHostedService<PaymentSubscriber>();
 
 var app = builder.Build();
 

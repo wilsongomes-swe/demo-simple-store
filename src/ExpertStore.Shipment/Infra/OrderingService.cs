@@ -1,6 +1,8 @@
 ﻿using ExpertStore.Shipment.Application.Integration;
 using Flurl;
 using Flurl.Http;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace ExpertStore.Shipment.Infra;
 
@@ -15,9 +17,11 @@ public class OrderingService : IOrderingService
     public async Task<OrderDto?> GetShipmentFromOrderDetails(Guid orderId)
     {
         _logger.LogInformation($"Calling ordering service to get the order: {orderId}");
-        var orderDto = await OrderingServiceUrl
-            .AppendPathSegment($"/orders/{orderId}")
-            .GetJsonAsync<OrderDto>();
+        var orderDtoJson = await OrderingServiceUrl
+            .AppendPathSegment($"/api/orders/{orderId}")
+            .GetStringAsync();
+        var orderDto = JsonConvert.DeserializeObject<OrderDto>(orderDtoJson);
+
         _logger.LogInformation($"Get response ok with orderId {orderDto.Id}");
         return orderDto;
     }
