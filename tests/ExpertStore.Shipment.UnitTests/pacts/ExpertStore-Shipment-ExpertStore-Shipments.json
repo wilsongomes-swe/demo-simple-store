@@ -1,0 +1,65 @@
+{
+  "consumer": {
+    "name": "ExpertStore-Shipment"
+  },
+  "interactions": [
+    {
+      "description": "A GET to get the order details",
+      "providerStates": [
+        {
+          "name": "There is an order with the specified ID"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/orders/d0389a71-e1c5-4667-b068-7466c12c433a"
+      },
+      "response": {
+        "body": {
+          "date": "2022-09-27T20:39:23.1904924-03:00",
+          "delivery": null,
+          "id": "d0389a71-e1c5-4667-b068-7466c12c433a",
+          "items": [
+            {
+              "productId": 1,
+              "quantity": 10,
+              "value": 100.0
+            },
+            {
+              "productId": 2,
+              "quantity": 1,
+              "value": 200.0
+            }
+          ],
+          "retailer": {
+            "address": "NY - NY US 10892",
+            "id": 1,
+            "name": "Nike"
+          },
+          "shopper": {
+            "address": "SP - SP BR 75880-000",
+            "id": 2,
+            "name": "Wilson"
+          },
+          "status": "Approved"
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.3.11",
+      "models": "0.4.5"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "ExpertStore-Shipments"
+  }
+}
