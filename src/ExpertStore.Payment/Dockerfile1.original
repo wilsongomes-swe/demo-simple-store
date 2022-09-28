@@ -7,17 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/ExpertStore.Payment/ExpertStore.Payment.csproj", "src/ExpertStore.Payment/"]
+COPY ["src/PaymentsProcessor/PaymentsProcessor.csproj", "src/PaymentsProcessor/"]
 COPY ["src/ExpertStore.SeedWork/ExpertStore.SeedWork.csproj", "src/ExpertStore.SeedWork/"]
-RUN dotnet restore "src/ExpertStore.Payment/ExpertStore.Payment.csproj"
+RUN dotnet restore "src/PaymentsProcessor/PaymentsProcessor.csproj"
 COPY . .
-WORKDIR "/src/src/ExpertStore.Payment"
-RUN dotnet build "ExpertStore.Payment.csproj" -c Release -o /app/build
+WORKDIR "/src/src/PaymentsProcessor"
+RUN dotnet build "PaymentsProcessor.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ExpertStore.Payment.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "PaymentsProcessor.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ExpertStore.Payment.dll"]
+ENTRYPOINT ["dotnet", "PaymentsProcessor.dll"]

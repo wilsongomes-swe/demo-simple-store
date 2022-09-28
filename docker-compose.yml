@@ -1,6 +1,12 @@
 version: '3.4'
 
 services:
+  rabbit:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+
   expertstore.ordering:
     image: ${DOCKER_REGISTRY-}expertstoreordering
     build:
@@ -9,17 +15,13 @@ services:
     ports:
       - 50080:80
 
-  rabbit:
-    image: rabbitmq:3-management
-    ports:
-      - 15672:15672
-      - 5672:5672
-
-  paymentsprocessor:
-    image: ${DOCKER_REGISTRY-}paymentsprocessor
+  expertstore.shipment:
+    image: ${DOCKER_REGISTRY-}expertstoreshipment
     build:
       context: .
-      dockerfile: src/PaymentsProcessor/Dockerfile
+      dockerfile: src/ExpertStore.Shipment/Dockerfile
+    ports:
+      - 50081:80
 
   external.thecarrier:
     image: ${DOCKER_REGISTRY-}externalthecarrier
@@ -29,11 +31,9 @@ services:
     ports:
       - 50082:80
 
-  expertstore.shipment:
-    image: ${DOCKER_REGISTRY-}expertstoreshipment
+  expertstore.payment:
+    image: ${DOCKER_REGISTRY-}expertstorepayment
     build:
       context: .
-      dockerfile: src/ExpertStore.Shipment/Dockerfile
-    ports:
-      - 50081:80
+      dockerfile: src/ExpertStore.Payment/Dockerfile
 
