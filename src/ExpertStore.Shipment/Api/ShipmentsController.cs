@@ -1,3 +1,5 @@
+using ExpertStore.SeedWork.Interfaces;
+using ExpertStore.Shipment.Application;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpertStore.Shipment.Api;
@@ -10,11 +12,25 @@ public class ShipmentsController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<string> Get()
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IReadOnlyCollection<ListShipmentsItem>))]
+    public async Task<IActionResult> GetList([FromServices] IUseCase<IReadOnlyCollection<ListShipmentsItem>?> useCase)
+        => Ok(await useCase.Handle());
+
+    [HttpGet("{shipmentId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDetail))]
+    public async Task<IActionResult> Get([FromRoute] GetShipmentDetailInput input, [FromServices] IUseCase<GetShipmentDetailInput, ShipmentDetail?> useCase)
     {
-        return null;
+        var item = await useCase.Handle(input);
+        if (item is null)
+            return NotFound(new ProblemDetails() { Title = $"Shipment '{input.ShipmentId}' not found." });
+
+        return Ok(item);
     }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RegisterShipmentOutput))]
+    public async Task<IActionResult> Get([FromBody] RegisterShipmentInput input, [FromServices] IUseCase<RegisterShipmentInput, RegisterShipmentOutput> useCase) => Created("", await useCase.Handle(input));
 
     readonly ILogger<ShipmentsController> _logger;
 }

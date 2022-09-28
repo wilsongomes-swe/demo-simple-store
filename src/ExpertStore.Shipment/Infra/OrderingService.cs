@@ -1,45 +1,25 @@
 ﻿using ExpertStore.Shipment.Application.Integration;
 using Flurl;
 using Flurl.Http;
-using Microsoft.Extensions.Configuration;
 
 namespace ExpertStore.Shipment.Infra;
 
 public class OrderingService : IOrderingService
 {
     private readonly string OrderingServiceUrl;
+    private readonly ILogger<OrderingService> _logger; 
 
-    public OrderingService(IConfiguration config) 
-        => OrderingServiceUrl = config.GetValue<string>("OrdersServiceUrl");
+    public OrderingService(IConfiguration config, ILogger<OrderingService> logger) 
+        => (OrderingServiceUrl, _logger) = (config.GetValue<string>("OrdersServiceUrl"), logger);
 
-    public async Task<Domain.Shipment?> GetShipmentFromOrderDetails(Guid orderId)
+    public async Task<OrderDto?> GetShipmentFromOrderDetails(Guid orderId)
     {
-        var orderDetail = await OrderingServiceUrl
+        _logger.LogInformation($"Calling ordering service to get the order: {orderId}");
+        var orderDto = await OrderingServiceUrl
             .AppendPathSegment($"/orders/{orderId}")
-            .GetJsonAsync<OrderDetail>();
-        if (orderDetail is null)
-            return null;
-        return new Domain.Shipment(
-            orderDetail.Id, 
-            new(orderDetail.Retailer.Name, orderDetail.Retailer.Address), 
-            new(orderDetail.Shopper.Name, orderDetail.Shopper.Address)
-        );
+            .GetJsonAsync<OrderDto>();
+        _logger.LogInformation($"Get response ok with orderId {orderDto.Id}");
+        return orderDto;
     }
 }
 
-internal record OrderDetail(
-    Guid Id,
-    string Status,
-    DateTime Date,
-    Person Retailer,
-    Person Shopper,
-    Delivery? Delivery,
-    IEnumerable<Item> Items); 
-
-internal record Person(int Id, string Name, string Address);
-
-internal record Item(int ProductId, int Quantity, decimal Value);
-
-internal record Delivery(string Status);
-
-internal record GetOrderInput(Guid OrderId);

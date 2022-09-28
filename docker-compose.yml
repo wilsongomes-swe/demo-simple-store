@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: src/ExpertStore.Ordering/Dockerfile
+    ports:
+      - 50080:80
 
   rabbit:
     image: rabbitmq:3-management
@@ -24,4 +26,14 @@ services:
     build:
       context: .
       dockerfile: src/External.TheCarrier/Dockerfile
+    ports:
+      - 50082:80
+
+  expertstore.shipment:
+    image: ${DOCKER_REGISTRY-}expertstoreshipment
+    build:
+      context: .
+      dockerfile: src/ExpertStore.Shipment/Dockerfile
+    ports:
+      - 50081:80
 
