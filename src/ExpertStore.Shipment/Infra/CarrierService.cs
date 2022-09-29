@@ -33,7 +33,7 @@ public class CarrierService : ICarrierService
     }
 }
 
-internal class RegisterShipmentInputDto
+public class RegisterShipmentInputDto
 {
     public string FromAddress { get; set; }
     public string ToAddress { get; set; }
@@ -41,7 +41,7 @@ internal class RegisterShipmentInputDto
     public List<string> LineItems { get; set; }
 }
 
-internal class RegisterShipmentResponseDto
+public class RegisterShipmentResponseDto
 {
     public string Id { get; set; }
     public string FromAddress { get; set; }

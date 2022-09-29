@@ -24,6 +24,7 @@ public class ShipmentsController : ControllerBase
             LineItems = input.LineItems,
             Label = Guid.NewGuid().ToString().Replace("-", ":label:")
         };
+
         _shipments.Add(shipment);
         return Created("", shipment);
     }

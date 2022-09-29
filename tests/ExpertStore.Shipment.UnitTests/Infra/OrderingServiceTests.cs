@@ -1,8 +1,6 @@
 ﻿using ExpertStore.Shipment.Application.Integration;
 using ExpertStore.Shipment.Infra;
 using FluentAssertions;
-using Flurl;
-using Flurl.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -10,7 +8,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PactNet;
 using Xunit.Abstractions;
-using PactNet.Infrastructure.Outputters;
 
 namespace ExpertStore.Shipment.UnitTests.Infra;
 
