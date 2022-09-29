@@ -2,9 +2,13 @@ using ExpertStore.SeedWork.Interfaces;
 using ExpertStore.SeedWork.RabbitProducer;
 using ExpertStore.Shipment.Application;
 using ExpertStore.Shipment.Application.Integration;
+using ExpertStore.Shipment.Configuration;
 using ExpertStore.Shipment.Domain;
 using ExpertStore.Shipment.Infra;
 using ExpertStore.Shipment.Subscribers;
+using Flurl.Http;
+using Flurl.Http.Configuration;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,7 @@ builder.Services.AddTransient<IOrderingService, OrderingService>();
 builder.Services.AddTransient<ICarrierService, CarrierService>();
 builder.Services.AddRabbitMessageBus();
 builder.Services.AddHostedService<PaymentSubscriber>();
+builder.Services.ConfigureFlur();
 
 var app = builder.Build();
 

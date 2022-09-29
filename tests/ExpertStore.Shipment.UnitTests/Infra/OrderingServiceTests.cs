@@ -50,13 +50,37 @@ public class OrderingServiceTests
 
         await PactBuilder.VerifyAsync(async ctx =>
         {
-            var configKeyValues = new Dictionary<string, string> {{ "OrdersServiceUrl", ctx.MockServerUri.ToString() }};
+            var configKeyValues = new Dictionary<string, string> { { "OrdersServiceUrl", ctx.MockServerUri.ToString() } };
             var config = (new ConfigurationBuilder()).AddInMemoryCollection(configKeyValues).Build();
 
             var service = new OrderingService(config, Mock.Of<ILogger<OrderingService>>());
             var response = await service.GetOrderDetails(exampleOrderId);
 
             response.Should().BeEquivalentTo(expectedResponse);
+        });
+    }
+
+    [Fact]
+    public async Task GetOrderDetails_OrderDoesntExists_ReturnNull()
+    {
+        var exampleOrderId = new Guid("db414e87-7856-4ef1-9db6-cf059ba2a647");
+        PactBuilder
+            .UponReceiving("A GET to get the order details")
+                .Given("There is not an order with the specified ID")
+                .WithRequest(HttpMethod.Get, $"/api/orders/{exampleOrderId}")
+            .WillRespond()
+                .WithStatus(System.Net.HttpStatusCode.NotFound)
+                .WithHeader("Content-Type", "application/json; charset=utf-8");
+
+        await PactBuilder.VerifyAsync(async ctx =>
+        {
+            var configKeyValues = new Dictionary<string, string> { { "OrdersServiceUrl", ctx.MockServerUri.ToString() } };
+            var config = (new ConfigurationBuilder()).AddInMemoryCollection(configKeyValues).Build();
+
+            var service = new OrderingService(config, Mock.Of<ILogger<OrderingService>>());
+            var response = await service.GetOrderDetails(exampleOrderId);
+
+            response.Should().BeNull();
         });
     }
 }

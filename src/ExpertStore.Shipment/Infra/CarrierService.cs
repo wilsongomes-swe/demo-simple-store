@@ -1,7 +1,9 @@
 ﻿using ExpertStore.Shipment.Application.Integration;
 using Flurl;
 using Flurl.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 
 namespace ExpertStore.Shipment.Infra;
 
@@ -18,18 +20,28 @@ public class CarrierService : ICarrierService
 
     public async Task<(string, string)> RegisterShipment(OrderDto orderDto)
     {
-        _logger.LogInformation($"Registering shipment from order: {orderDto.Id}");
-        var registeredShipmentJson = await CarrierUrl
-            .AppendPathSegment("shipments")
-            .PostJsonAsync(new RegisterShipmentInputDto { 
-                InsuranceValue = orderDto.Items.Aggregate((decimal)0, (value, item) => value + item.Value),
-                LineItems = orderDto.Items.Select(x => $"Product #{x.ProductId} - {x.Value}").ToList(),
-                FromAddress = orderDto.Retailer.Address,
-                ToAddress = orderDto.Shopper.Address
-            }).ReceiveString();
-        var registeredShipment = JsonConvert.DeserializeObject<RegisterShipmentResponseDto>(registeredShipmentJson);
-        _logger.LogInformation($"Registered! Shipment id: {registeredShipment.Id}");
-        return (registeredShipment.Id, registeredShipment.Label);
+        try
+        {
+            _logger.LogInformation($"Registering shipment from order: {orderDto.Id}");
+            var registeredShipmentJson = await CarrierUrl
+                .AppendPathSegment("shipments")
+                .PostJsonAsync(new RegisterShipmentInputDto
+                {
+                    InsuranceValue = orderDto.Items.Aggregate((decimal)0, (value, item) => value + item.Value),
+                    LineItems = orderDto.Items.Select(x => $"Product #{x.ProductId} - {x.Value}").ToList(),
+                    FromAddress = orderDto.Retailer.Address,
+                    ToAddress = orderDto.Shopper.Address
+                }).ReceiveString();
+            var registeredShipment = JsonConvert.DeserializeObject<RegisterShipmentResponseDto>(registeredShipmentJson);
+            _logger.LogInformation($"Registered! Shipment id: {registeredShipment.Id}");
+            return (registeredShipment.Id, registeredShipment.Label);
+        }
+        catch (FlurlHttpException ex)
+        {
+            var error = await ex.GetResponseStringAsync();
+            _logger.LogError($"Error returned from {ex.Call.Request.Url}: {error}");
+            throw new Exception(error);
+        }
     }
 }
 

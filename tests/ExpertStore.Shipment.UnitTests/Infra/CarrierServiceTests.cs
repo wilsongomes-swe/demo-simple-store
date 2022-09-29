@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using FluentAssertions;
+using System.Data.Common;
+using Flurl.Http;
+using ExpertStore.Shipment.Configuration;
 
 namespace ExpertStore.Shipment.UnitTests.Infra;
 public class CarrierServiceTests
@@ -21,7 +24,8 @@ public class CarrierServiceTests
             DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
         };
         IPactV3 pact = Pact.V3("ExpertStore-Shipment", "External-TheCarrier", config);
-        PactBuilder = pact.WithHttpInteractions();
+        PactBuilder = pact.WithHttpInteractions(61733);
+        FlurlHttp.Configure(settings => settings.JsonSerializer = new JsonNetSerializer());
     }
 
     [Fact]
@@ -61,7 +65,7 @@ public class CarrierServiceTests
         PactBuilder
             .UponReceiving("A POST to register a shipment in the Carrier")
                 .WithRequest(HttpMethod.Post, "/shipments")
-                .WithJsonBody(registerShipmentInputDto)
+                .WithJsonBody(registerShipmentInputDto, "application/json")
             .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.Created)
                 .WithHeader("Content-Type", "application/json; charset=utf-8")
