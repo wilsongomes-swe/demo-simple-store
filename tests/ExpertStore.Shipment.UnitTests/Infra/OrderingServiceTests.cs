@@ -20,7 +20,7 @@ public class OrderingServiceTests
         var config = new PactConfig {
             PactDir = "../../../../../pacts/",
             DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }};
-        IPactV3 pact = Pact.V3("ExpertStore-Shipment", "ExpertStore-Shipments", config);
+        IPactV3 pact = Pact.V3("ExpertStore-Shipment", "ExpertStore-Ordering", config);
         PactBuilder = pact.WithHttpInteractions();
     }
 
@@ -70,7 +70,7 @@ public class OrderingServiceTests
                 .WithRequest(HttpMethod.Get, $"/api/orders/{exampleOrderId}")
             .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.NotFound)
-                .WithHeader("Content-Type", "application/json; charset=utf-8");
+                .WithHeader("Content-Type", "application/problem+json; charset=utf-8");
 
         await PactBuilder.VerifyAsync(async ctx =>
         {

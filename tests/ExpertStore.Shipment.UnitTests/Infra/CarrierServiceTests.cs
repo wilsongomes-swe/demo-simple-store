@@ -24,7 +24,7 @@ public class CarrierServiceTests
             DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
         };
         IPactV3 pact = Pact.V3("ExpertStore-Shipment", "External-TheCarrier", config);
-        PactBuilder = pact.WithHttpInteractions(61733);
+        PactBuilder = pact.WithHttpInteractions();
         FlurlHttp.Configure(settings => settings.JsonSerializer = new JsonNetSerializer());
     }
 

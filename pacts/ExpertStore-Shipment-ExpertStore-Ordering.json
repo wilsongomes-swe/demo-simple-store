@@ -16,7 +16,7 @@
       },
       "response": {
         "body": {
-          "date": "2022-09-29T11:35:22.5927018+01:00",
+          "date": "2022-09-29T16:58:21.833707+01:00",
           "delivery": null,
           "id": "d0389a71-e1c5-4667-b068-7466c12c433a",
           "items": [
@@ -62,7 +62,7 @@
       },
       "response": {
         "headers": {
-          "Content-Type": "application/json; charset=utf-8"
+          "Content-Type": "application/problem+json; charset=utf-8"
         },
         "status": 404
       }
@@ -78,6 +78,6 @@
     }
   },
   "provider": {
-    "name": "ExpertStore-Shipments"
+    "name": "ExpertStore-Ordering"
   }
 }
