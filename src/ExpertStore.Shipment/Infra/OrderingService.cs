@@ -16,14 +16,26 @@ public class OrderingService : IOrderingService
 
     public async Task<OrderDto?> GetOrderDetails(Guid orderId)
     {
-        _logger.LogInformation($"Calling ordering service to get the order: {orderId}");
-        var orderDtoJson = await OrderingServiceUrl
-            .AppendPathSegment($"/api/orders/{orderId}")
-            .GetStringAsync();
-        var orderDto = JsonConvert.DeserializeObject<OrderDto>(orderDtoJson);
+        try
+        {
+            _logger.LogInformation($"Calling ordering service to get the order: {orderId}");
+            var orderDtoJson = await OrderingServiceUrl
+                .AppendPathSegment($"/api/orders/{orderId}")
+                .GetStringAsync();
+            var orderDto = JsonConvert.DeserializeObject<OrderDto>(orderDtoJson);
 
-        _logger.LogInformation($"Get response ok with orderId {orderDto.Id}");
-        return orderDto;
+            _logger.LogInformation($"Get response ok with orderId {orderDto.Id}");
+            return orderDto;
+        }
+        catch (FlurlHttpException ex)
+        {
+            if (ex.Call.Response.StatusCode == StatusCodes.Status404NotFound)
+                return null;
+
+            var error = await ex.GetResponseStringAsync();
+            _logger.LogError($"Error returned from {ex.Call.Request.Url}: {error}");
+            throw new Exception(error);
+        }
     }
 }
 

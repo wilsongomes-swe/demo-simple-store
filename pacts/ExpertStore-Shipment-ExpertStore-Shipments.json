@@ -16,7 +16,7 @@
       },
       "response": {
         "body": {
-          "date": "2022-09-28T19:11:39.158037+01:00",
+          "date": "2022-09-28T17:03:37.5986151-03:00",
           "delivery": null,
           "id": "d0389a71-e1c5-4667-b068-7466c12c433a",
           "items": [
@@ -47,6 +47,24 @@
           "Content-Type": "application/json; charset=utf-8"
         },
         "status": 200
+      }
+    },
+    {
+      "description": "A GET to get the order details",
+      "providerStates": [
+        {
+          "name": "There is not an order with the specified ID"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/orders/db414e87-7856-4ef1-9db6-cf059ba2a647"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "status": 404
       }
     }
   ],

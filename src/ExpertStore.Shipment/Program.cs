@@ -6,9 +6,6 @@ using ExpertStore.Shipment.Configuration;
 using ExpertStore.Shipment.Domain;
 using ExpertStore.Shipment.Infra;
 using ExpertStore.Shipment.Subscribers;
-using Flurl.Http;
-using Flurl.Http.Configuration;
-using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 

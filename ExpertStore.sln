@@ -13,13 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpertStore.Shipment", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "External.TheCarrier", "src\External.TheCarrier\External.TheCarrier.csproj", "{FF6DE65C-6AAA-406A-8336-DF8780A50865}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpertStore.Payment", "src\ExpertStore.Payment\ExpertStore.Payment.csproj", "{114DE037-1058-46A6-BA70-51C579F51270}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpertStore.Payment", "src\ExpertStore.Payment\ExpertStore.Payment.csproj", "{114DE037-1058-46A6-BA70-51C579F51270}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpertStore.SeedWork", "src\ExpertStore.SeedWork\ExpertStore.SeedWork.csproj", "{17730C17-187C-408F-9EDB-B161DAD9B22F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7B520F1E-36EB-4121-824D-34CF134F5A3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpertStore.Shipment.UnitTests", "tests\ExpertStore.Shipment.UnitTests\ExpertStore.Shipment.UnitTests.csproj", "{1DA78BD2-B0CE-4ED2-A1A1-C93612DB5300}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpertStore.Shipment.UnitTests", "tests\ExpertStore.Shipment.UnitTests\ExpertStore.Shipment.UnitTests.csproj", "{1DA78BD2-B0CE-4ED2-A1A1-C93612DB5300}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpertStore.Ordering.UnitTests", "tests\ExpertStore.Ordering.UnitTests\ExpertStore.Ordering.UnitTests.csproj", "{505918B2-23F3-49F3-BB55-77DBC7044238}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{1DA78BD2-B0CE-4ED2-A1A1-C93612DB5300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DA78BD2-B0CE-4ED2-A1A1-C93612DB5300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DA78BD2-B0CE-4ED2-A1A1-C93612DB5300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{505918B2-23F3-49F3-BB55-77DBC7044238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{505918B2-23F3-49F3-BB55-77DBC7044238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{505918B2-23F3-49F3-BB55-77DBC7044238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{505918B2-23F3-49F3-BB55-77DBC7044238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +72,7 @@ Global
 		{114DE037-1058-46A6-BA70-51C579F51270} = {4969A1DF-C0A9-47E0-BD08-4A07FB9635E8}
 		{17730C17-187C-408F-9EDB-B161DAD9B22F} = {4969A1DF-C0A9-47E0-BD08-4A07FB9635E8}
 		{1DA78BD2-B0CE-4ED2-A1A1-C93612DB5300} = {7B520F1E-36EB-4121-824D-34CF134F5A3B}
+		{505918B2-23F3-49F3-BB55-77DBC7044238} = {7B520F1E-36EB-4121-824D-34CF134F5A3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF02B4F4-CAFC-4316-9F3D-D7B6E0F54FBC}

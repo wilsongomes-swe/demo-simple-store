@@ -64,6 +64,7 @@ public class CarrierServiceTests
 
         PactBuilder
             .UponReceiving("A POST to register a shipment in the Carrier")
+                .Given("This is a valid shipment data")
                 .WithRequest(HttpMethod.Post, "/shipments")
                 .WithJsonBody(registerShipmentInputDto, "application/json")
             .WillRespond()
