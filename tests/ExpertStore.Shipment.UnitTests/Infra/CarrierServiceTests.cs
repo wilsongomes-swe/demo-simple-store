@@ -22,11 +22,11 @@ public class CarrierServiceTests
         var config = new PactConfig
         {
             PactDir = "../../../../../pacts/",
-            DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
+            // DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
         };
         IPactV3 pact = Pact.V3("ExpertStore-Shipment", "External-TheCarrier", config);
         PactBuilder = pact.WithHttpInteractions();
-        FlurlHttp.Configure(settings => settings.JsonSerializer = new JsonNetSerializer());
+        // FlurlHttp.Configure(settings => settings.JsonSerializer = new JsonNetSerializer());
     }
 
     [Fact]
