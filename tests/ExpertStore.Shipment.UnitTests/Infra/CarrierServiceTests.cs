@@ -11,6 +11,7 @@ using FluentAssertions;
 using System.Data.Common;
 using Flurl.Http;
 using ExpertStore.Shipment.Configuration;
+using PactNet.Matchers;
 
 namespace ExpertStore.Shipment.UnitTests.Infra;
 public class CarrierServiceTests
@@ -66,11 +67,11 @@ public class CarrierServiceTests
             .UponReceiving("A POST to register a shipment in the Carrier")
                 .Given("This is a valid shipment data")
                 .WithRequest(HttpMethod.Post, "/shipments")
-                .WithJsonBody(registerShipmentInputDto, "application/json")
+                .WithJsonBody(new TypeMatcher(registerShipmentInputDto), "application/json")
             .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.Created)
                 .WithHeader("Content-Type", "application/json; charset=utf-8")
-                .WithJsonBody(expectedOutput);
+                .WithJsonBody(new TypeMatcher(expectedOutput));
 
         await PactBuilder.VerifyAsync(async ctx =>
         {

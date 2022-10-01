@@ -15,6 +15,17 @@ public class Order
         Shopper = shopper;
     }
 
+    public Order(Guid id, OrderStatus status, DateTime date, Person retailer, Person shopper, Delivery? delivery, List<OrderItem> items)
+    {
+        Id=id;
+        Status=status;
+        Date=date;
+        Retailer=retailer;
+        Shopper=shopper;
+        Delivery=delivery;
+        _items=items;
+    }
+
     public void AddItem(int productId, int quantity, decimal value)
         => _items.Add(new OrderItem(productId, quantity, value));
 

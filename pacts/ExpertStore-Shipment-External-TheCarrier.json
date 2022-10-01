@@ -5,44 +5,6 @@
   "interactions": [
     {
       "description": "A POST to register a shipment in the Carrier",
-      "request": {
-        "body": {
-          "fromAddress": "NY - NY US 10892",
-          "insuranceValue": 300.0,
-          "lineItems": [
-            "Product #1 - 100",
-            "Product #2 - 200"
-          ],
-          "toAddress": "SP - SP BR 75880-000"
-        },
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "method": "POST",
-        "path": "/shipments"
-      },
-      "response": {
-        "body": {
-          "cost": 5.0,
-          "fromAddress": "NY - NY US 10892",
-          "id": "a06f1e39-3",
-          "insuranceValue": 300.0,
-          "label": "4f284ec3:label:da90:label:45ff:label:a500:label:0b9b7bc17fac",
-          "lineItems": [
-            "Product #1 - 100",
-            "Product #2 - 200"
-          ],
-          "status": "Registered",
-          "toAddress": "SP - SP BR 75880-000"
-        },
-        "headers": {
-          "Content-Type": "application/json; charset=utf-8"
-        },
-        "status": 201
-      }
-    },
-    {
-      "description": "A POST to register a shipment in the Carrier",
       "providerStates": [
         {
           "name": "This is a valid shipment data"
@@ -61,6 +23,18 @@
         "headers": {
           "Content-Type": "application/json"
         },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
         "method": "POST",
         "path": "/shipments"
       },
@@ -68,9 +42,9 @@
         "body": {
           "cost": 5.0,
           "fromAddress": "NY - NY US 10892",
-          "id": "1919723d-1",
+          "id": "7e018a74-e",
           "insuranceValue": 300.0,
-          "label": "acae8c92:label:73f4:label:4941:label:bf67:label:fc10330328da",
+          "label": "c6031f29:label:316c:label:4d1f:label:a9c6:label:d7ee67635df8",
           "lineItems": [
             "Product #1 - 100",
             "Product #2 - 200"
@@ -80,6 +54,19 @@
         },
         "headers": {
           "Content-Type": "application/json; charset=utf-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {}
         },
         "status": 201
       }

@@ -7,6 +7,7 @@ using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PactNet;
+using PactNet.Matchers;
 using Xunit.Abstractions;
 
 namespace ExpertStore.Shipment.UnitTests.Infra;
@@ -19,7 +20,8 @@ public class OrderingServiceTests
     {
         var config = new PactConfig {
             PactDir = "../../../../../pacts/",
-            DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }};
+            DefaultJsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
+        };
         IPactV3 pact = Pact.V3("ExpertStore-Shipment", "ExpertStore-Ordering", config);
         PactBuilder = pact.WithHttpInteractions();
     }
@@ -46,7 +48,7 @@ public class OrderingServiceTests
             .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.OK)
                 .WithHeader("Content-Type", "application/json; charset=utf-8")
-                .WithJsonBody(expectedResponse);
+                .WithJsonBody(new TypeMatcher(expectedResponse));
 
         await PactBuilder.VerifyAsync(async ctx =>
         {
