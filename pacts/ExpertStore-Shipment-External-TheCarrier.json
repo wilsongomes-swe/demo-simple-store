@@ -12,13 +12,13 @@
       ],
       "request": {
         "body": {
-          "FromAddress": "NY - NY US 10892",
-          "InsuranceValue": 300.0,
-          "LineItems": [
+          "fromAddress": "NY - NY US 10892",
+          "insuranceValue": 300.0,
+          "lineItems": [
             "Product #1 - 100",
             "Product #2 - 200"
           ],
-          "ToAddress": "SP - SP BR 75880-000"
+          "toAddress": "SP - SP BR 75880-000"
         },
         "headers": {
           "Content-Type": "application/json"
@@ -40,17 +40,17 @@
       },
       "response": {
         "body": {
-          "Cost": 5.0,
-          "FromAddress": "NY - NY US 10892",
-          "Id": "8eae7581-f",
-          "InsuranceValue": 300.0,
-          "Label": "9e9fd6c0:label:0f16:label:4265:label:a92a:label:22a4047d5c24",
-          "LineItems": [
+          "cost": 5.0,
+          "fromAddress": "NY - NY US 10892",
+          "id": "55c90a1f-5",
+          "insuranceValue": 300.0,
+          "label": "1edf27eb:label:5896:label:4939:label:9f4a:label:5d58190b69c7",
+          "lineItems": [
             "Product #1 - 100",
             "Product #2 - 200"
           ],
-          "Status": "Registered",
-          "ToAddress": "SP - SP BR 75880-000"
+          "status": "Registered",
+          "toAddress": "SP - SP BR 75880-000"
         },
         "headers": {
           "Content-Type": "application/json; charset=utf-8"

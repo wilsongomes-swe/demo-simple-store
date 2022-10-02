@@ -9,13 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.7.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="PactNet" Version="4.2.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -29,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ExpertStore.Ordering\ExpertStore.Ordering.csproj" />
+    <ProjectReference Include="..\..\src\External.TheCarrier\External.TheCarrier.csproj" />
     <ProjectReference Include="..\ProviderContractTests.Shared\ProviderContractTests.Shared.csproj" />
   </ItemGroup>
 
