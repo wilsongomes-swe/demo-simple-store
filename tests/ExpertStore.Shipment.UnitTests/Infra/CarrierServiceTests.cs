@@ -12,6 +12,7 @@ using System.Data.Common;
 using Flurl.Http;
 using ExpertStore.Shipment.Configuration;
 using PactNet.Matchers;
+using Match = PactNet.Matchers.Match;
 
 namespace ExpertStore.Shipment.UnitTests.Infra;
 public class CarrierServiceTests
@@ -53,7 +54,7 @@ public class CarrierServiceTests
 
         var expectedOutput = new RegisterShipmentResponseDto()
         {
-            Id = Guid.NewGuid().ToString().Substring(0, 10),
+            Id = "55c90a1f-5",
             Cost = 5,
             FromAddress = registerShipmentInputDto.FromAddress,
             ToAddress = registerShipmentInputDto.ToAddress,
@@ -71,7 +72,15 @@ public class CarrierServiceTests
             .WillRespond()
                 .WithStatus(System.Net.HttpStatusCode.Created)
                 .WithHeader("Content-Type", "application/json; charset=utf-8")
-                .WithJsonBody(new TypeMatcher(expectedOutput));
+                .WithJsonBody(new TypeMatcher(new { 
+                    Id = Match.Type(expectedOutput.Id),
+                    Cost = Match.Type(expectedOutput.Cost),
+                    ToAddress = Match.Type(registerShipmentInputDto.ToAddress),
+                    Status = Match.Regex("Registered", "Registered|Undefined"),
+                    InsuranceValue = Match.Type(registerShipmentInputDto.InsuranceValue),
+                    LineItems = Match.Type(registerShipmentInputDto.LineItems),
+                    Label = Match.Type(expectedOutput.Label)
+                }));
 
         await PactBuilder.VerifyAsync(async ctx =>
         {

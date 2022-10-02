@@ -41,10 +41,9 @@
       "response": {
         "body": {
           "cost": 5.0,
-          "fromAddress": "NY - NY US 10892",
           "id": "55c90a1f-5",
           "insuranceValue": 300.0,
-          "label": "1edf27eb:label:5896:label:4939:label:9f4a:label:5d58190b69c7",
+          "label": "1d2cbd16:label:3f1c:label:4830:label:bd4c:label:7f7a56213479",
           "lineItems": [
             "Product #1 - 100",
             "Product #2 - 200"
@@ -58,6 +57,63 @@
         "matchingRules": {
           "body": {
             "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.cost": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.insuranceValue": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.label": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.lineItems": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "Registered|Undefined"
+                }
+              ]
+            },
+            "$.toAddress": {
               "combine": "AND",
               "matchers": [
                 {
